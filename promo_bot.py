@@ -11,54 +11,66 @@ API_ID = 37236703
 API_HASH = 'a6d70fd6d0f99283ec4eea089e0ea397'
 BOT_TOKEN = '7721954754:AAFSNi7iBj--zCGxJI6zE-TTypJ052yG14c'
 
-# Yahan aapka naya channel update kar diya gaya hai 👇
 TARGET_CHANNEL = '@LootRadarIndia'
 BUTTON_LINK = 'https://t.me/Youtube20Sub_bot'
 
 # IST Timezone
 IST = timezone(timedelta(hours=5, minutes=30))
 
-# Naya Delay Cycle (Minutes me) - Average ~30 mins.
-# Total 32 channels hain, toh 17 ghante (6 AM - 11 PM) me aaram se send ho jayenge.
-DELAY_CYCLE = [27, 33, 24, 35, 29] 
+# Naya Delay Cycle (Minutes me) - Average ~21 mins.
+DELAY_CYCLE = [18, 22, 19, 24, 21] 
 
-# ================= PROOF DATA (Total 32 Channels) =================
+# ================= PROOF DATA (NEW LIST) =================
 PROOF_DATA = [
-    # Puraane 17 Channels
-    {"name": "Bakchodi Vines", "total": "200+", "link": "https://youtube.com/@the_bakchodi_vines?si=RFxkMXOR67yHP3jn"},
-    {"name": "Rahul Creative Hub", "total": "600+", "link": "https://youtube.com/channel/UCQFrQc49Ab-aOPtvBk6PaPQ?si=_tST4RAJnS-pT1eZ"},
-    {"name": "Adarsh Vlogs", "total": "1K+", "link": "https://youtube.com/@adarshvlogs-r15?si=3nMPY5ehsvtyyryO"},
-    {"name": "Rajendra Official", "total": "4K+", "link": "https://youtube.com/@rajendraofficia?si=535yQI0S_shA8451"},
-    {"name": "Akash Naik", "total": "100+", "link": "https://youtube.com/@akashnaik-r8y?si=OKjfKAmWEytT6yx4"},
-    {"name": "Suraj Kasder", "total": "200+", "link": "https://youtube.com/@surajkasder-x4q?si=Q0ZTkJU4n-YcKTt3"},
-    {"name": "VJ Kohli", "total": "400+", "link": "https://youtube.com/@imvjkohli?si=oJw3nuui-9Ylrs5D"},
-    {"name": "Tasty Food Shorts Gupta", "total": "500+", "link": "https://youtube.com/@tastyfoodshortsgupta?si=XL1POkbwHvMohZRd"},
-    {"name": "Gaming & Funny Video", "total": "200+", "link": "https://youtube.com/@gamingandfunnyvideo-m8h?si=KXf1-d3WDidvgv2_"},
-    {"name": "Naman Editz", "total": "1K+", "link": "https://youtube.com/@naman_editz30?si=Ig16Laqa_8udfBML"},
-    {"name": "Gangster FFX", "total": "1K+", "link": "https://youtube.com/@gangster_ffx62?si=SVjoij2Ce0jzyCwt"},
-    {"name": "Sonali Singh Vlogs", "total": "2K+", "link": "https://youtube.com/@sonalisinghvlogs-----?si=EWq7V4Dj8JIGDp0_"},
-    {"name": "Daily Anime Shots", "total": "2K+", "link": "https://youtube.com/@dailyanimeshots?si=aWn_XrQ08qYtdYNP"},
-    {"name": "The Happy Place", "total": "400+", "link": "https://youtube.com/@thehappyplace2.0?si=LXXLCbbUbTzh6fm8"},
-    {"name": "Sanaya Jain", "total": "1K+", "link": "https://youtube.com/@sanyamjain8488?si=1to0FqQx_y1f2WFx"},
-    {"name": "Alone Music", "total": "300+", "link": "https://youtube.com/@alonemusic55?si=oKyc4UP5OdPAU9Jz"},
-    {"name": "NK Ronix", "total": "1K+", "link": "https://youtube.com/@nk_ronix?si=L90bCh87qQvRVqwi"},
-    
-    # Naye 15 Channels
-    {"name": "Indian tractor", "total": "500+", "link": "https://youtube.com/@amitkumaramitkumarm5u?si=Wg1kmdES63Sw5KeW"},
-    {"name": "Durgesh", "total": "300+", "link": "https://youtube.com/@durgeshdangi3167?si=-Fsr079nfEv8dNxO"},
-    {"name": "Yadav funny club", "total": "100+", "link": "https://youtube.com/@yadavfunnyclub?si=sSG7k0o9G59limCz"},
-    {"name": "The viral", "total": "5K+", "link": "https://youtube.com/@theviralnews61?si=-iNW6WScJE6FAfoB"},
-    {"name": "RD tecnical", "total": "3K+", "link": "https://youtube.com/@rdtechnical88?si=u0Kmi7d3S8po5oHK"},
-    {"name": "UBC news Hindi", "total": "3K+", "link": "https://youtube.com/@ubchindi?si=DUwI12KgE3Wrqvdt"},
-    {"name": "English guru", "total": "18K+", "link": "https://youtube.com/@englishgurucampus?si=8IuzTsp-0JNR3WxK"},
-    {"name": "NCRT class", "total": "6K+", "link": "https://youtube.com/@gravity_guru?si=1MUeWHoOXmiiWZvb"},
-    {"name": "Wegot Guru", "total": "7K+", "link": "https://youtube.com/@wegotguru?si=QugmQhk35w6UQCSo"},
-    {"name": "Sangam education", "total": "2K+", "link": "https://youtube.com/@sangamsangrameducation?si=6DYqUPoUdSvmhd6f"},
-    {"name": "Hemanta book", "total": "200+", "link": "https://youtube.com/@hemantabookpedia?si=gtK_Xo3Yx3mNEAN1"},
-    {"name": "Sahil rokhri", "total": "200+", "link": "https://youtube.com/@sahilrokhriproearning?si=cE_lv6b9eVPSJrq8"},
-    {"name": "Rubis cartoon", "total": "400+", "link": "https://youtube.com/@rubiscartoon-f4n?si=UmEgLeCL9X2Elo08"},
-    {"name": "Payal dancer", "total": "5K+", "link": "https://youtube.com/@payal_dancer_18?si=NAwjQgSUZ4dSQaiI"},
-    {"name": "Oxygen for education", "total": "100+", "link": "https://youtube.com/@oxygenforeducators?si=PkHJzh6ITxDt20ak"}
+    {"name": "Raju Hembram", "total": "200", "link": "https://youtube.com/@onlyaisong10k?si=Uq9nqunf7tmL1IT6"},
+    {"name": "Mukesh Prasad", "total": "100", "link": "https://youtube.com/@mukeshprasad2.0?si=XmeWWQAYws0mbJrU"},
+    {"name": "Kailash Chaudhary", "total": "200", "link": "https://www.youtube.com/@kailashchaudhary9221"},
+    {"name": "Dhakad ji Dhakad ji", "total": "200", "link": "https://youtube.com/@preetlover987rj?si=rk96H0AErv0bnrU2"},
+    {"name": "YT tecnical", "total": "100", "link": "https://youtube.com/@infinityfactx07?si=bthHyjsYFn7SpAW_"},
+    {"name": "Aliya Khan", "total": "100", "link": "https://www.youtube.com/@funnyfever8"},
+    {"name": "SRT X XEROX", "total": "200", "link": "https://youtube.com/@srtxxerox?si=4s6qulLp7ql2wygD"},
+    {"name": "NITIN Kumar", "total": "200", "link": "https://youtube.com/@safarnama-e-engineer?si=N8-sbVAva3pmUQYB"},
+    {"name": "N A Y A N ツ", "total": "100", "link": "https://www.youtube.com/@NAYANGAMING1-full"},
+    {"name": "Sahib Gosal", "total": "100", "link": "https://youtube.com/@fastclipshq-1?si=b7-9asXM4V3DrIKY"},
+    {"name": "System Jack", "total": "100", "link": "https://www.youtube.com/@codinguruji8686"},
+    {"name": "Siddhu", "total": "100", "link": "https://youtube.com/@animexworld-c1l?si=WPlSL6eDmAdZk52k"},
+    {"name": "Prince Kumar Sharma", "total": "100", "link": "https://youtube.com/@priteeofficial703?si=AVjGuziGuVUpgM6j"},
+    {"name": "Devil's Queen 😈😈😈", "total": "200", "link": "https://youtube.com/@thebhaktirasofficial?si=QVlvZZnH5VgmYWkJ"},
+    {"name": "Manish Mahiya", "total": "100", "link": "https://youtube.com/@genzasmr-7?si=1KEvfUa7V7kmGHSt"},
+    {"name": "$âk$hî 🍁", "total": "100", "link": "https://youtube.com/@aiventra1234?si=bIgMjymVQhlfDxGi"},
+    {"name": "Akash Yadav", "total": "100", "link": "https://youtube.com/@factzonehindi-1234?si=ZOptnU9IAcWckaMZ"},
+    {"name": "Mohd Mohsin", "total": "200", "link": "https://youtube.com/@mdmohsin-o7p9o?si=PM4bWGtFrXskuQ6H"},
+    {"name": "Gulashan Kumar", "total": "100", "link": "https://www.youtube.com/@AiEditorvideo-s4p"},
+    {"name": "Sonu Kumar", "total": "100", "link": "https://www.youtube.com/@Sonukumarx1234"},
+    {"name": "Gulashan Kumar (2)", "total": "100", "link": "https://www.youtube.com/@AiEditorvideo-s4p"},
+    {"name": "Puja Srivastava", "total": "200", "link": "https://youtube.com/@koreandrama11k?si=Tj4d77S9-XNYaITT"},
+    {"name": "Tuhin Hossain", "total": "100", "link": "https://youtube.com/@tuhinhossainvlogs?feature=shared"},
+    {"name": "Vakil Ahmad", "total": "200", "link": "https://youtube.com/@dailywithvakil-m7t?si=yF6DjRO4p0eiwZhR"},
+    {"name": "JY", "total": "100", "link": "https://youtube.com/@hurrycurryrecipes?si=CzWSEYp9bnHgZvWe"},
+    {"name": "akc Musical Brand", "total": "200", "link": "https://youtube.com/@akcmusicalbrand?si=Q-e60expJmdYfS56"},
+    {"name": "𝐈𝐬𝐭𝐢𝐲𝐚𝐤 𝐞𝐝𝐢𝐭𝐳", "total": "100", "link": "https://youtube.com/@istyartx?si=80BfnaVqhpHxmxB7"},
+    {"name": "Shiva Earth", "total": "200", "link": "https://youtube.com/@beingshivarth?si=bnRlvGWJc6bOgOHM"},
+    {"name": "Gora Gora", "total": "100", "link": "https://youtube.com/@harryart-z4i?si=G0nxEz7xvFYhVOK1"},
+    {"name": "No Name", "total": "200", "link": "https://youtube.com/@gkhackergamer?si=Czoj4DjNojTd8k8J"},
+    {"name": "Shiva Earth (2)", "total": "200", "link": "https://youtube.com/@beingshivarth?si=wZGmCAncWPCB138M"},
+    {"name": "Asgar Ali", "total": "200", "link": "https://www.youtube.com/@Vejitebalkindom1"},
+    {"name": "Satish Kumar", "total": "200", "link": "https://youtube.com/@bhaktiganga369?si=SDvAD07punSy8rC1"},
+    {"name": "Amar Magat", "total": "200", "link": "https://youtube.com/@susmitaashik?si=ePiKDktVDblHMmOU"},
+    {"name": "Vijay", "total": "100", "link": "https://www.youtube.com/@HNNmotivation"},
+    {"name": "Guru Ji", "total": "100", "link": "https://youtube.com/@anilkaka1?si=MCjXjds3jDo1z2EH"},
+    {"name": "AK", "total": "200", "link": "https://youtube.com/@sanatangyandeep1k?si=SREvO-89S-PIlZE2"},
+    {"name": "Ajay verma", "total": "100", "link": "https://www.youtube.com/@medenrgy"},
+    {"name": "Amrit", "total": "200", "link": "https://youtube.com/@theeternaljournal-s8p?si=ADyKfxsJoJUNZsbh"},
+    {"name": "ᴀᴅɪᴛyᴀ ᴋᴜᴍᴀʀ", "total": "200", "link": "https://youtube.com/@primeaditya1k?si=OWFFDtxdFI7YTL1z"},
+    {"name": "akc Musical Brand (2)", "total": "200", "link": "https://youtube.com/@akcmusicalbrand?si=YrZz4M7dqEXvULh6"},
+    {"name": "Anushka Rai", "total": "200", "link": "https://youtube.com/@anushkarai5719?si=RRvDCqZYpDSQ-5if"},
+    {"name": "A G", "total": "100", "link": "https://www.youtube.com/@AshK-b1w"},
+    {"name": "Debjani Bhakat", "total": "200", "link": "https://youtube.com/@cartoonworld4x?si=NmpYzLD90XigiXsA"},
+    {"name": "Grace Of God", "total": "200", "link": "https://youtube.com/@dreamyjc"},
+    {"name": "K K", "total": "200", "link": "https://www.youtube.com/@LifeUnfiltered-Sk"},
+    {"name": "Suresh Dancer", "total": "100", "link": "https://youtube.com/@sbnepal-s1s2?si=e7mCkT8CT1yogXfp"},
+    {"name": "Kavanng", "total": "200", "link": "https://www.youtube.com/@gopalpipalva"},
+    {"name": "Ibran Khan", "total": "200", "link": "https://www.youtube.com/@RaktickEditz"}
 ]
 
 # ================= DAILY PROOF QUEUE =================
@@ -88,37 +100,34 @@ def get_next_proof():
     return daily_queue.pop(0)
 
 # ================= MESSAGE =================
-def generate_message():
-    proof = get_next_proof()
+def generate_message(proof):
+    return f"""🎉 Congratulations {proof['name']} 🎉
 
-    if proof is None:
-        return None
+✅ Aapke YouTube channel par {proof['total']} Subscribers Successfully Add ho gaye hain! 🎯
 
-    return f"""Congratulations 🎉👏🏻 **{proof['name']}**
-
-Apki link 🖇️
-Par 100 subscribers successful add hogye he please chack 👇🏻
+🔗 Aapki Link:   Please chack
 
 {proof['link']}
 
-          Total send {proof['total']} subscribers
-
-Or subscribe badane ke liye abhi click kre 👇🏻"""
+🚀Apne YouTube Channel par aur Subscribers badhane ke liye abhi click karein 👇🏻"""
 
 # ================= BOT =================
 async def send_proof(client):
     try:
-        message = generate_message()
+        proof = get_next_proof()
 
-        if message is None:
+        if proof is None:
             print("📭 All proofs exhausted for today. Waiting for next day...")
             return False
+            
+        message = generate_message(proof)
 
         await client.send_message(
             TARGET_CHANNEL,
             message,
             buttons=[
-                Button.url("📈 100 subscribers", BUTTON_LINK)
+                # Button ko waise hi 100 par fix kar diya hai
+                Button.url("📈 100 Subscribers", BUTTON_LINK)
             ]
         )
 
@@ -137,11 +146,9 @@ async def scheduler(client):
     while True:
         now = datetime.now(IST)
 
-        # Auto refresh queue at new IST day
         if current_day != now.date():
             reset_daily_queue()
 
-        # Active hours: Subah 6 baje se Raat 11 baje (23:00) tak
         if 6 <= now.hour < 23:
 
             if daily_queue:
@@ -197,7 +204,6 @@ async def main():
 
     print("🤖 Bot started successfully")
 
-    # First message instantly
     await send_proof(client)
 
     await asyncio.gather(
