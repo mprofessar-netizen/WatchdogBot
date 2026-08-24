@@ -1,4 +1,5 @@
 import os
+import re
 import asyncio
 import random
 from datetime import datetime, timedelta, timezone
@@ -17,81 +18,291 @@ BUTTON_LINK = 'https://t.me/Youtube20Sub_bot'
 # IST Timezone
 IST = timezone(timedelta(hours=5, minutes=30))
 
-# Naya Delay Cycle (Minutes me) - Average ~21 mins.
+# Delay Cycle (Minutes me)
 DELAY_CYCLE = [18, 22, 19, 24, 21] 
 
-# ================= PROOF DATA (NEW LIST) =================
-PROOF_DATA = [
-    {"name": "Raju Hembram", "total": "200", "link": "https://youtube.com/@onlyaisong10k?si=Uq9nqunf7tmL1IT6"},
-    {"name": "Mukesh Prasad", "total": "100", "link": "https://youtube.com/@mukeshprasad2.0?si=XmeWWQAYws0mbJrU"},
-    {"name": "Kailash Chaudhary", "total": "200", "link": "https://www.youtube.com/@kailashchaudhary9221"},
-    {"name": "Dhakad ji Dhakad ji", "total": "200", "link": "https://youtube.com/@preetlover987rj?si=rk96H0AErv0bnrU2"},
-    {"name": "YT tecnical", "total": "100", "link": "https://youtube.com/@infinityfactx07?si=bthHyjsYFn7SpAW_"},
-    {"name": "Aliya Khan", "total": "100", "link": "https://www.youtube.com/@funnyfever8"},
-    {"name": "SRT X XEROX", "total": "200", "link": "https://youtube.com/@srtxxerox?si=4s6qulLp7ql2wygD"},
-    {"name": "NITIN Kumar", "total": "200", "link": "https://youtube.com/@safarnama-e-engineer?si=N8-sbVAva3pmUQYB"},
-    {"name": "N A Y A N ツ", "total": "100", "link": "https://www.youtube.com/@NAYANGAMING1-full"},
-    {"name": "Sahib Gosal", "total": "100", "link": "https://youtube.com/@fastclipshq-1?si=b7-9asXM4V3DrIKY"},
-    {"name": "System Jack", "total": "100", "link": "https://www.youtube.com/@codinguruji8686"},
-    {"name": "Siddhu", "total": "100", "link": "https://youtube.com/@animexworld-c1l?si=WPlSL6eDmAdZk52k"},
-    {"name": "Prince Kumar Sharma", "total": "100", "link": "https://youtube.com/@priteeofficial703?si=AVjGuziGuVUpgM6j"},
-    {"name": "Devil's Queen 😈😈😈", "total": "200", "link": "https://youtube.com/@thebhaktirasofficial?si=QVlvZZnH5VgmYWkJ"},
-    {"name": "Manish Mahiya", "total": "100", "link": "https://youtube.com/@genzasmr-7?si=1KEvfUa7V7kmGHSt"},
-    {"name": "$âk$hî 🍁", "total": "100", "link": "https://youtube.com/@aiventra1234?si=bIgMjymVQhlfDxGi"},
-    {"name": "Akash Yadav", "total": "100", "link": "https://youtube.com/@factzonehindi-1234?si=ZOptnU9IAcWckaMZ"},
-    {"name": "Mohd Mohsin", "total": "200", "link": "https://youtube.com/@mdmohsin-o7p9o?si=PM4bWGtFrXskuQ6H"},
-    {"name": "Gulashan Kumar", "total": "100", "link": "https://www.youtube.com/@AiEditorvideo-s4p"},
-    {"name": "Sonu Kumar", "total": "100", "link": "https://www.youtube.com/@Sonukumarx1234"},
-    {"name": "Gulashan Kumar (2)", "total": "100", "link": "https://www.youtube.com/@AiEditorvideo-s4p"},
-    {"name": "Puja Srivastava", "total": "200", "link": "https://youtube.com/@koreandrama11k?si=Tj4d77S9-XNYaITT"},
-    {"name": "Tuhin Hossain", "total": "100", "link": "https://youtube.com/@tuhinhossainvlogs?feature=shared"},
-    {"name": "Vakil Ahmad", "total": "200", "link": "https://youtube.com/@dailywithvakil-m7t?si=yF6DjRO4p0eiwZhR"},
-    {"name": "JY", "total": "100", "link": "https://youtube.com/@hurrycurryrecipes?si=CzWSEYp9bnHgZvWe"},
-    {"name": "akc Musical Brand", "total": "200", "link": "https://youtube.com/@akcmusicalbrand?si=Q-e60expJmdYfS56"},
-    {"name": "𝐈𝐬𝐭𝐢𝐲𝐚𝐤 𝐞𝐝𝐢𝐭𝐳", "total": "100", "link": "https://youtube.com/@istyartx?si=80BfnaVqhpHxmxB7"},
-    {"name": "Shiva Earth", "total": "200", "link": "https://youtube.com/@beingshivarth?si=bnRlvGWJc6bOgOHM"},
-    {"name": "Gora Gora", "total": "100", "link": "https://youtube.com/@harryart-z4i?si=G0nxEz7xvFYhVOK1"},
-    {"name": "No Name", "total": "200", "link": "https://youtube.com/@gkhackergamer?si=Czoj4DjNojTd8k8J"},
-    {"name": "Shiva Earth (2)", "total": "200", "link": "https://youtube.com/@beingshivarth?si=wZGmCAncWPCB138M"},
-    {"name": "Asgar Ali", "total": "200", "link": "https://www.youtube.com/@Vejitebalkindom1"},
-    {"name": "Satish Kumar", "total": "200", "link": "https://youtube.com/@bhaktiganga369?si=SDvAD07punSy8rC1"},
-    {"name": "Amar Magat", "total": "200", "link": "https://youtube.com/@susmitaashik?si=ePiKDktVDblHMmOU"},
-    {"name": "Vijay", "total": "100", "link": "https://www.youtube.com/@HNNmotivation"},
-    {"name": "Guru Ji", "total": "100", "link": "https://youtube.com/@anilkaka1?si=MCjXjds3jDo1z2EH"},
-    {"name": "AK", "total": "200", "link": "https://youtube.com/@sanatangyandeep1k?si=SREvO-89S-PIlZE2"},
-    {"name": "Ajay verma", "total": "100", "link": "https://www.youtube.com/@medenrgy"},
-    {"name": "Amrit", "total": "200", "link": "https://youtube.com/@theeternaljournal-s8p?si=ADyKfxsJoJUNZsbh"},
-    {"name": "ᴀᴅɪᴛyᴀ ᴋᴜᴍᴀʀ", "total": "200", "link": "https://youtube.com/@primeaditya1k?si=OWFFDtxdFI7YTL1z"},
-    {"name": "akc Musical Brand (2)", "total": "200", "link": "https://youtube.com/@akcmusicalbrand?si=YrZz4M7dqEXvULh6"},
-    {"name": "Anushka Rai", "total": "200", "link": "https://youtube.com/@anushkarai5719?si=RRvDCqZYpDSQ-5if"},
-    {"name": "A G", "total": "100", "link": "https://www.youtube.com/@AshK-b1w"},
-    {"name": "Debjani Bhakat", "total": "200", "link": "https://youtube.com/@cartoonworld4x?si=NmpYzLD90XigiXsA"},
-    {"name": "Grace Of God", "total": "200", "link": "https://youtube.com/@dreamyjc"},
-    {"name": "K K", "total": "200", "link": "https://www.youtube.com/@LifeUnfiltered-Sk"},
-    {"name": "Suresh Dancer", "total": "100", "link": "https://youtube.com/@sbnepal-s1s2?si=e7mCkT8CT1yogXfp"},
-    {"name": "Kavanng", "total": "200", "link": "https://www.youtube.com/@gopalpipalva"},
-    {"name": "Ibran Khan", "total": "200", "link": "https://www.youtube.com/@RaktickEditz"}
-]
+# ================= 7-DAY SCHEDULING PATTERN =================
+# N = Normal Message, G = Golden Message
+DAY_PATTERNS = {
+    1: [3, 'G', 4, 'G', 2, 'G', 5, 'G', 3, 'G', 4, 'G', 2, 'G', 5, 'G', 3, 'G', 4, 'G', 8, 'G'],
+    2: [2, 'G', 5, 'G', 3, 'G', 4, 'G', 2, 'G', 4, 'G', 3, 'G', 5, 'G', 2, 'G', 4, 'G', 9, 'G'],
+    3: [5, 'G', 2, 'G', 4, 'G', 3, 'G', 5, 'G', 2, 'G', 3, 'G', 4, 'G', 2, 'G', 5, 'G', 8, 'G'],
+    4: [4, 'G', 2, 'G', 5, 'G', 3, 'G', 4, 'G', 2, 'G', 5, 'G', 3, 'G', 4, 'G', 2, 'G', 9, 'G'],
+    5: [2, 'G', 3, 'G', 5, 'G', 2, 'G', 4, 'G', 5, 'G', 3, 'G', 2, 'G', 4, 'G', 3, 'G', 10, 'G'],
+    6: [3, 'G', 5, 'G', 2, 'G', 4, 'G', 3, 'G', 2, 'G', 5, 'G', 4, 'G', 3, 'G', 4, 'G', 8, 'G'],
+    7: [5, 'G', 3, 'G', 2, 'G', 4, 'G', 5, 'G', 2, 'G', 3, 'G', 4, 'G', 3, 'G', 5, 'G', 7, 'G'],
+}
 
-# ================= DAILY PROOF QUEUE =================
+
+# ================= RAW DATA (YAHAN COPY PASTE KAREIN) =================
+# Bhai, aage se jab bhi nayi list aaye, bas purani delete karke yahan nayi paste kar dena bina kisi formatting ke!
+
+GOLDEN_RAW_TEXT = """
+funny adda
+https://www.youtube.com/@funny_adda_123-p2h
+mono MOTO
+https://www.youtube.com/@MonoMoto
+MT official
+https://www.youtube.com/@manukutadingi
+Music
+https://www.youtube.com/@myfusion
+EL mono
+https://www.youtube.com/@ELMONONK250
+Tips 2T
+https://www.youtube.com/@juqui
+THE black MT
+https://www.youtube.com/@TheBlackMT
+B1 Moto
+https://www.youtube.com/@b1.motoadv
+48 central
+https://www.youtube.com/@48central76
+Citi hikers
+https://www.youtube.com/channel/UCfU0mnTG2ixQmSDxzXXxHKg
+Mood of sad song
+https://www.youtube.com/@SK_99_CREATION
+motos
+https://www.youtube.com/@losdelasmotos
+my 11 collection
+https://www.youtube.com/@My112collection
+kk modifiy
+https://www.youtube.com/@kkmodification3212
+starz TV
+https://www.youtube.com/@MotostarzTV
+VB
+https://www.youtube.com/@VbPalmeiras-j4m
+midia rara
+https://www.youtube.com/@raramedia26420
+Rick
+https://www.youtube.com/@RickandAndreaGetOutside
+pedal frinds
+https://www.youtube.com/@PedalFriends
+manish official
+https://www.youtube.com/@Manishofficialertainment
+Manoj
+https://www.youtube.com/@Manishmanojofficial
+entertanment
+https://www.youtube.com/@manojentertainment9935
+kuwara kawaii 
+https://www.youtube.com/@kuwarakwahitv4275
+Youtube pintu
+https://www.youtube.com/@PintuIsLivee
+kayla art
+https://www.youtube.com/@ArtsyKayla
+rani
+https://www.youtube.com/@RaniCreativeCorner-v6i
+Frensh
+https://www.youtube.com/@FrenchFlairCorner
+Nilesh alawa 
+https://youtube.com/@nileshalave6?si=513dq8Kqx27i_s1K
+Treders life 
+https://youtube.com/@tradewithlaksh99?si=mXIokPl2dg4fyfob
+Crypto log
+https://youtube.com/@cryptolog1?si=p1MyYV3sukFt-DU8
+Vassu
+https://youtube.com/@vassuislive?si=J6Jyzy4CiK4CcjCJ
+Tips with Barsa
+https://youtube.com/@tipswithbarsha?si=8zBndLnNQ5qySFr7
+Motivation by hussain 
+https://youtube.com/@mha2211?si=H0COJyDYv6Qvuev_
+All things 
+https://youtube.com/@faizangillani-z7h?si=A7VVtZPaOdpNdVPy
+KEB automation 
+https://youtube.com/@kebautomation?si=6mlPY77klUMpXP1Q
+Window treatments 
+https://youtube.com/@wtmarketingpros?si=MAW3awnl1_9M_BzF
+Alayna coocking 
+https://youtube.com/@sharrykhan1766?si=1G2DjbhWLn6rHXE4
+Tip earning 
+https://youtube.com/@tipearning?si=W73_ykcDiXDVKYdr
+Moe's meme
+https://youtube.com/@moesmemes?si=fzmxxP3MvD5jkxSW
+Rexis CPM 
+https://youtube.com/@cpm.rexiss?si=pjQBThH5vUgGrF1m
+Motivation hour
+https://youtube.com/@motivationhourrecipes?si=D9vsjazATmGPkV42
+Let's cook
+https://youtube.com/@letscookwithhoney?si=aVMy6P2xrj4B6RN_
+F HOQUE
+https://youtube.com/@fhoque?si=qAw73hY3tJHbSWZK
+PHESTO
+https://youtube.com/@phestotech?si=SKxNAxUduQWnBRxc
+Guide Tech pro
+https://youtube.com/@guidetechpro?si=_RLtux-mWn6LzZUk
+Itz hars editz
+https://youtube.com/@itzhrsheditz9000?si=w2W2VbEoLOHXNFGR
+Babu edit
+https://youtube.com/@babueditz-sp6uy?si=MEU2upJJLOqNwud4
+Read book class 10th
+https://youtube.com/@readbook199?si=hNnTHSLmkE1AbDxl
+Money video 
+https://youtube.com/@monkeyai_video2?si=HRtPnBXBFKv7_gUU
+Mood mod
+https://youtube.com/@moodmode?si=_5PW5mno2TZuLBON
+Timmy talk
+https://youtube.com/@timmytalkstoday?si=xjCABxfa_FoxwYgp
+Rizlaw bits
+https://youtube.com/@prod.rizlaw?si=4PRS2_DAi15EnjDR
+English with asima ali
+https://youtube.com/@englishwithasimaali?si=1LHuHAHtJeH-Vluw
+Saqlain tech
+https://youtube.com/@saqlaintech-h9w?si=YMljYilexefOxcRM
+Ai plus mod
+https://youtube.com/@aiplusmore?si=a1O7VzM1BKm5Bi7U
+Short PK
+https://youtube.com/@aishortspk1?si=lSFDK4STbtzUj4MT
+Jace' real
+https://youtube.com/@jacesrealreviews?si=up6EfuQKauO_Ky7t
+Offical monkey treck 
+https://youtube.com/@elvishtech?si=Risf5f7UIIqlb3Rx
+Review central 
+https://youtube.com/@yourreviewcentral?si=cZPvXtocA0h10FsY
+Wealth without wall strict 
+https://youtube.com/@wealthwithoutwallstreet?si=YdTE0Nmlr1yb9MXE
+BeamNG Toro
+https://youtube.com/@beamngtoro?si=0fotlhdABdiArd7w
+Deadlox
+https://youtube.com/@deadloxgamingu?si=lAKin111YtvcLI9x
+Vikas shorts
+https://youtube.com/@vikas_shorts_15?si=ToM9loxTVAsh6iD5
+999 gari Gamer 
+https://youtube.com/@999garigamer?si=Aggt7d469yi7UR20
+Umraw meena
+https://youtube.com/@umravmeena9?si=qL32jvf72tIjYDr7
+Tips and tricks 
+https://youtube.com/@tipstricks-e7o?si=-QzLW-TJLMfC9MbL
+Game store 
+https://youtube.com/@realgamestore?si=yFmQYMsmDtK7Etav
+Variant investor
+https://youtube.com/@variantinvestor?si=m0aMCwrU2ixu-FDs
+To The Bank 
+https://youtube.com/@tothepointbanking1938?si=_vHcddhP8IxzPH8t
+VK vinay
+https://youtube.com/@vkvinaystreetfood?si=0q66RpzIpjg0Lb_9
+Lokesh meena
+https://youtube.com/@lokeshmeena2469?si=cDVjBvOWdLMcS1DT
+Snake rescue 
+https://youtube.com/@snakerescueteamhardoi?si=GHz-IdTIV9oOCZtx
+Online gaming 
+https://youtube.com/@onlinegaming-786?si=eY4GCQpmyssoLoU6
+Deep boutique
+https://youtube.com/@deepboutiquecollection?si=wCDP6BlUmOmgOgJM
+Vivian 
+https://youtube.com/@viviancurates?si=0azRWWVrw8Mh6SJT
+Bass magzine 
+https://youtube.com/@bassmagazine?si=m5bkbLLNnAtR04Fs
+Amrita Vishwa 
+https://youtube.com/@coimbatorecampus?si=9B8J-L1lOCCh7sPH
+"""
+
+NORMAL_RAW_TEXT = """
+🚨 NEW WITHDRAWAL!
+👤 Raju Hembram
+🎯 200 Subs
+🔗 https://youtube.com/@onlyaisong10k?si=Uq9nqunf7tmL1IT6
+
+🚨 NEW WITHDRAWAL!
+👤 Mukesh Prasad
+🎯 100 Subs
+🔗 https://youtube.com/@mukeshprasad2.0?si=XmeWWQAYws0mbJrU
+
+🚨 NEW WITHDRAWAL!
+👤 Kailash Chaudhary
+🎯 200 Subs
+🔗 https://www.youtube.com/@kailashchaudhary9221
+
+savita
+100
+https://www.youtube.com/@savita2182
+
+EL padre
+100
+https://www.youtube.com/@ElPadreCoreano
+
+🚨 NEW WITHDRAWAL REQUEST!
+👤 User: 10vs10
+🎯 Target: 100 Subs
+🔗 Link: https://youtube.com/@anni-i7b?si=IscGwAV1v8NgOCbM
+
+colour prediction 
+200
+https://www.youtube.com/@Colourpredictionhacktricks
+
+guru jii
+100
+https://www.youtube.com/@vaibhavtripathi015
+"""
+# Note: Maine Normal raw text thoda short rakha hai display ke liye, aap apni puri list direct iske andar paste kar dena bina kisi tension ke!
+
+
+# ================= DATA PARSERS =================
+def load_golden_data(raw_text):
+    results = []
+    # Automatically extracts Name and Link
+    pattern = re.compile(r'([^\n]+)\n+(https?://[^\n]+)')
+    for m in pattern.finditer(raw_text):
+        results.append({'name': m.group(1).strip(), 'total': '1000', 'link': m.group(2).strip()})
+    return results
+
+def load_normal_data(raw_text):
+    results = []
+    # Matches the 🚨 format
+    pattern1 = re.compile(r'👤 (?:User:\s*)?([^\n]+)\n+🎯 (?:Target:\s*)?(\d+)\s*Subs\n+🔗 (?:Link:\s*)?(https?://[^\n]+)', re.IGNORECASE)
+    for m in pattern1.finditer(raw_text):
+        results.append({'name': m.group(1).strip(), 'total': m.group(2).strip(), 'link': m.group(3).strip()})
+    
+    clean_text = pattern1.sub('', raw_text)
+    
+    # Matches the plain text format (Name, 100/200, Link)
+    pattern2 = re.compile(r'([^\n]+)\n+(100|120|200)\n+(https?://[^\n]+)')
+    for m in pattern2.finditer(clean_text):
+        results.append({'name': m.group(1).strip(), 'total': m.group(2).strip(), 'link': m.group(3).strip()})
+    
+    return results
+
+GOLDEN_DATA = load_golden_data(GOLDEN_RAW_TEXT)
+NORMAL_DATA = load_normal_data(NORMAL_RAW_TEXT)
+
+# ================= DAILY SCHEDULING SYSTEM =================
 daily_queue = []
 current_day = None
+normal_pool = []
+golden_pool = []
 
 def reset_daily_queue():
-    global daily_queue, current_day
+    global daily_queue, current_day, normal_pool, golden_pool
 
-    current_day = datetime.now(IST).date()
-    daily_queue = PROOF_DATA.copy()
-    random.shuffle(daily_queue)
+    now = datetime.now(IST)
+    current_day = now.date()
+    
+    # Python me isoweekday: Monday=1, Tuesday=2 ... Sunday=7
+    day_number = now.isoweekday() 
+    pattern = DAY_PATTERNS[day_number]
 
-    print(f"🔄 Daily proof queue refreshed ({len(daily_queue)} entries) for {current_day}")
+    daily_queue = []
+
+    for item in pattern:
+        if item == 'G':
+            if not golden_pool:
+                golden_pool = GOLDEN_DATA.copy()
+                random.shuffle(golden_pool)
+            proof = golden_pool.pop(0).copy()
+            proof['type'] = 'G'
+            daily_queue.append(proof)
+        else:
+            for _ in range(item):
+                if not normal_pool:
+                    normal_pool = NORMAL_DATA.copy()
+                    random.shuffle(normal_pool)
+                proof = normal_pool.pop(0).copy()
+                proof['type'] = 'N'
+                daily_queue.append(proof)
+
+    print(f"🔄 Day {day_number} queue generated: {len(daily_queue)} messages for today.")
 
 def get_next_proof():
     global daily_queue, current_day
 
-    today = datetime.now(IST).date()
-
-    if current_day != today:
+    if current_day != datetime.now(IST).date():
         reset_daily_queue()
 
     if not daily_queue:
@@ -99,17 +310,27 @@ def get_next_proof():
 
     return daily_queue.pop(0)
 
-# ================= MESSAGE =================
+# ================= MESSAGE FORMATTING =================
 def generate_message(proof):
-    return f"""🎉 Congratulations {proof['name']} 🎉
+    if proof['type'] == 'G':
+        # Golden Message (Fully Bold)
+        return f"""**🏆 GOLDEN MEMBER 🏆**
+**🎉 Congratulations, {proof['name']}! 🎉**
+**✅ Aapke YouTube Channel par 1,000 Subscribers successfully add ho gaye hain! 🚀**
+**🔗 Aapki Channel Link: 👇🏻**
+**{proof['link']}**
+**📈 Aur Subscribers badhane ke liye**
+**👇🏻 Abhi yahan click karein 👇🏻**"""
+    else:
+        # Normal Message
+        return f"""🎉 Congratulations {proof['name']}🎉
 
-✅ Aapke YouTube channel par {proof['total']} Subscribers Successfully Add ho gaye hain! 🎯
+✅ Aapke YouTube Channel par {proof['total']} Subscribers Successfully Add ho gaye hain! 🎯
 
-🔗 Aapki Link:   Please chack
-
+🔗 Aapki Channel Link: 👇🏻
 {proof['link']}
 
-🚀Apne YouTube Channel par aur Subscribers badhane ke liye abhi click karein 👇🏻"""
+🚀 Aur Subscribers badhane ke liye abhi click karein 👇🏻"""
 
 # ================= BOT =================
 async def send_proof(client):
@@ -126,13 +347,12 @@ async def send_proof(client):
             TARGET_CHANNEL,
             message,
             buttons=[
-                # Button ko waise hi 100 par fix kar diya hai
                 Button.url("📈 100 Subscribers", BUTTON_LINK)
             ]
         )
 
         remaining = len(daily_queue)
-        print(f"✅ Message sent | Remaining proofs today: {remaining}")
+        print(f"✅ Message sent ({proof['type']}) | Remaining today: {remaining}")
         return True
 
     except Exception as e:
@@ -150,7 +370,6 @@ async def scheduler(client):
             reset_daily_queue()
 
         if 6 <= now.hour < 23:
-
             if daily_queue:
                 await send_proof(client)
 
@@ -159,18 +378,15 @@ async def scheduler(client):
 
                 print(f"⏳ Next message in {delay} minutes")
                 await asyncio.sleep(delay * 60)
-
             else:
                 tomorrow = datetime.combine(
                     now.date() + timedelta(days=1),
                     datetime.min.time(),
                     tzinfo=IST
                 )
-
                 wait_seconds = (tomorrow - now).total_seconds()
-                print(f"📭 All proofs used today. Sleeping until next IST day ({int(wait_seconds)} sec)")
+                print(f"📭 Today's queue empty. Sleeping for {int(wait_seconds)} sec")
                 await asyncio.sleep(max(60, wait_seconds))
-
         else:
             print("🌙 Night mode sleeping...")
             await asyncio.sleep(1800)
@@ -178,32 +394,24 @@ async def scheduler(client):
 # ================= KEEP ALIVE =================
 async def keep_alive():
     from aiohttp import web
-
     async def handle(request):
-        return web.Response(text="Bot is alive")
-
+        return web.Response(text="Bot is running smoothly")
     app = web.Application()
     app.router.add_get("/", handle)
-
     port = int(os.environ.get("PORT", 10000))
-
     runner = web.AppRunner(app)
     await runner.setup()
-    
     site = web.TCPSite(runner, "0.0.0.0", port)
     await site.start()
-    
     print(f"🌐 Server running on port {port}")
 
 # ================= MAIN =================
 async def main():
     reset_daily_queue()
-
     client = TelegramClient(MemorySession(), API_ID, API_HASH)
     await client.start(bot_token=BOT_TOKEN)
-
-    print("🤖 Bot started successfully")
-
+    print("🤖 Bot started successfully with new 7-Day pattern!")
+    
     await send_proof(client)
 
     await asyncio.gather(
