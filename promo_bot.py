@@ -19,21 +19,29 @@ BUTTON_LINK = 'https://t.me/Youtube20Sub_bot'
 IST = timezone(timedelta(hours=5, minutes=30))
 STATE_FILE = "bot_state.json"
 
-# ================= RAW DATA (YAHAN COPY PASTE KAREIN) =================
+# ================= RAW DATA =================
 GOLDEN_RAW_TEXT = """
-[AAPKI GOLDEN LIST YAHAN HOGI - Purana wala hi rehne dena]
+[YAHAN APNI GOLDEN LIST DAAL DENA]
 """
 
 NORMAL_RAW_TEXT = """
-[AAPKI NORMAL LIST YAHAN HOGI - Purana wala hi rehne dena]
+[YAHAN APNI NORMAL LIST DAAL DENA]
 """
 
 # ================= DATA PARSERS =================
 def load_golden_data(raw_text):
     results = []
-    pattern = re.compile(r'([^\n]+)\n+(https?://[^\n]+)')
-    for m in pattern.finditer(raw_text):
-        results.append({'name': m.group(1).strip(), 'total': '1000', 'link': m.group(2).strip()})
+    # Saare khali lines hata kar sirf text wali lines nikalte hain
+    lines = [line.strip() for line in raw_text.split('\n') if line.strip()]
+    
+    for i in range(len(lines)):
+        # Agar line 'http' se shuru hoti hai, toh uske theek upar wali line 'name' hogi
+        if lines[i].startswith("http"):
+            if i > 0:
+                name = lines[i-1]
+                # Faltu emojis ya text clean karne ke liye (just in case)
+                name = name.replace("👤", "").replace("User:", "").strip()
+                results.append({'name': name, 'total': '1000', 'link': lines[i]})
     return results
 
 def load_normal_data(raw_text):
@@ -51,6 +59,11 @@ def load_normal_data(raw_text):
 
 GOLDEN_DATA = load_golden_data(GOLDEN_RAW_TEXT)
 NORMAL_DATA = load_normal_data(NORMAL_RAW_TEXT)
+
+print("==========================================")
+print(f"📊 SYSTEM CHECK: Normal Messages Loaded: {len(NORMAL_DATA)}")
+print(f"📊 SYSTEM CHECK: Golden Messages Loaded: {len(GOLDEN_DATA)}")
+print("==========================================")
 
 # ================= STATE MANAGEMENT (NO REPEATS) =================
 state = {
@@ -90,7 +103,7 @@ def reset_daily_queue():
         state["golden_pool"] = GOLDEN_DATA.copy()
         random.shuffle(state["golden_pool"])
         
-    # Failsafe: if only one got empty slightly early due to division
+    # Failsafe
     if not state["normal_pool"]:
         state["normal_pool"] = NORMAL_DATA.copy()
         random.shuffle(state["normal_pool"])
@@ -98,7 +111,6 @@ def reset_daily_queue():
         state["golden_pool"] = GOLDEN_DATA.copy()
         random.shuffle(state["golden_pool"])
 
-    # Din ki limit nikalna: ~43 Normal aur ~11 Golden
     normals_for_today = []
     for _ in range(min(43, len(state["normal_pool"]))):
         proof = state["normal_pool"].pop(0).copy()
@@ -115,7 +127,6 @@ def reset_daily_queue():
     daily_queue = []
     n_idx = 0
     while n_idx < len(normals_for_today) or goldens_for_today:
-        # Random gap 2 se 5 messages ka
         gap = random.randint(2, 5) 
         for _ in range(gap):
             if n_idx < len(normals_for_today):
@@ -140,7 +151,6 @@ def get_next_proof():
     if not state["daily_queue"]:
         return None
 
-    # Pop message and save state immediately
     proof = state["daily_queue"].pop(0)
     save_state()
     return proof
@@ -200,12 +210,10 @@ async def scheduler(client):
         if state["current_day_str"] != today_str:
             reset_daily_queue()
 
-        # Timing strict: Subah 6 baje se raat 10 baje tak (6:00 to 21:59)
         if 6 <= now.hour < 22:
             if state["daily_queue"]:
                 await send_proof(client)
 
-                # Random delay between 16 to 19 minutes (Natural lagta hai aur 16 ghante me sahi fit baithta hai)
                 delay = random.randint(16, 19)
                 
                 print(f"⏳ Next message in {delay} minutes")
@@ -217,7 +225,6 @@ async def scheduler(client):
                 await asyncio.sleep(max(60, wait_seconds))
         else:
             print("🌙 Night mode sleeping... Wait till 6 AM.")
-            # Raat me har aadhe ghante me check karega subah hui ya nahi
             await asyncio.sleep(1800)
 
 # ================= KEEP ALIVE =================
