@@ -20,8 +20,6 @@ IST = timezone(timedelta(hours=5, minutes=30))
 QUEUE_FILE = "message_queue.json"
 
 # ================= RAW DATA =================
-# Aap yahan apna raw text direct paste kar sakte ho, code khud isko padh lega.
-
 RAW_GOLDEN = """
 funny adda
 https://www.youtube.com/@funny_adda_123-p2h
@@ -1232,7 +1230,6 @@ def parse_normal_data(raw_text):
     for line in lines:
         if "🚨" in line: continue
         
-        # Cleanup extra words
         line = line.replace("👤 User:", "").replace("👤", "").strip()
         line = line.replace("🎯 Target:", "").replace("🎯", "").replace("Subs", "").strip()
         line = line.replace("🔗 Link:", "").replace("🔗", "").strip()
@@ -1249,7 +1246,7 @@ def parse_normal_data(raw_text):
             })
     return parsed
 
-# ================= QUEUE MANAGEMENT =================
+# ================= QUEUE MANAGEMENT (FIXED LOGIC) =================
 def generate_fresh_queue():
     normal = parse_normal_data(RAW_NORMAL)
     golden = parse_golden_data(RAW_GOLDEN)
@@ -1258,25 +1255,32 @@ def generate_fresh_queue():
     random.shuffle(golden)
     
     queue = []
+    consecutive_normal = 0
+    
+    # Decide initial target gap (1, 2, or 3)
+    target_gap = random.randint(1, 3)
+    
     while normal or golden:
-        # Har 1, 2, 3, 4 ya 5 normal ke baad ek golden jayega
-        count = random.randint(1, 5)
-        for _ in range(count):
-            if normal:
+        if normal and golden:
+            if consecutive_normal >= target_gap:
+                queue.append(golden.pop(0))
+                consecutive_normal = 0
+                target_gap = random.randint(1, 3) # Naya gap set karega
+            else:
                 queue.append(normal.pop(0))
-        
-        if golden:
+                consecutive_normal += 1
+        elif normal:
+            # Agar bas normal bache hain
+            queue.append(normal.pop(0))
+        elif golden:
+            # Agar bas golden bache hain
             queue.append(golden.pop(0))
             
-    # Agar kuch bach jaye toh last me add ho jayenge
-    queue.extend(normal)
-    queue.extend(golden)
-    
     return queue
 
 def get_next_proof():
     queue = []
-    # Queue.json read karna (taaki server restart ho toh bhi data save rahe)
+    
     if os.path.exists(QUEUE_FILE):
         try:
             with open(QUEUE_FILE, 'r', encoding='utf-8') as f:
@@ -1290,7 +1294,6 @@ def get_next_proof():
         
     proof = queue.pop(0)
     
-    # Update queue back to json file
     with open(QUEUE_FILE, 'w', encoding='utf-8') as f:
         json.dump(queue, f, indent=4)
         
@@ -1351,7 +1354,6 @@ async def scheduler(client):
         hour = now.hour
 
         if 6 <= hour < 22:
-            # ☀️ DAY MODE: Subah 6 baje se Raat 10 baje tak (16-18 mins delay)
             success = await send_proof(client)
             if success:
                 delay = random.choice([16, 17, 18])
@@ -1361,7 +1363,6 @@ async def scheduler(client):
                 await asyncio.sleep(60)
 
         elif 0 <= hour < 5:
-            # 🌙 NIGHT MODE: Raat 12 baje se Subah 5 baje tak (35-45 mins delay)
             success = await send_proof(client)
             if success:
                 delay = random.choice([35, 40, 45])
@@ -1371,9 +1372,8 @@ async def scheduler(client):
                 await asyncio.sleep(60)
 
         else:
-            # ⏸ PAUSE MODE: (10 PM - 12 AM) & (5 AM - 6 AM)
             print("⏸ Pause Mode: Waiting for next active time window...")
-            await asyncio.sleep(1800) # Check every 30 minutes
+            await asyncio.sleep(1800) 
 
 # ================= KEEP ALIVE =================
 async def keep_alive():
@@ -1402,7 +1402,6 @@ async def main():
 
     print("🤖 Bot started successfully")
 
-    # Start processes
     await asyncio.gather(
         scheduler(client),
         keep_alive()
