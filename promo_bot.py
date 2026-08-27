@@ -1214,9 +1214,10 @@ def parse_golden_data(raw_text):
     
     for i in range(0, len(lines), 2):
         if i + 1 < len(lines):
+            # Ab 1,000 hata diya, yahan par automatically random 100 ya 200 assign hoga
             parsed.append({
                 "name": lines[i],
-                "total": "1,000",
+                "total": random.choice(["100", "200"]), 
                 "link": lines[i+1],
                 "is_golden": True
             })
@@ -1246,7 +1247,7 @@ def parse_normal_data(raw_text):
             })
     return parsed
 
-# ================= QUEUE MANAGEMENT (FIXED LOGIC) =================
+# ================= QUEUE MANAGEMENT =================
 def generate_fresh_queue():
     normal = parse_normal_data(RAW_NORMAL)
     golden = parse_golden_data(RAW_GOLDEN)
@@ -1301,23 +1302,15 @@ def get_next_proof():
 
 # ================= MESSAGE BUILDER =================
 def generate_message(proof):
-    if proof.get("is_golden"):
-        return f"""**🏆 GOLDEN MEMBER** 
-
-**🎉 Congratulations, {proof['name']}**
-
-**✅ Aapke YouTube Channel par 1,000 Subscribers successfully add ho gaye hain! 🚀**
-
-**🔗 Aapki Channel Link: 👇🏻**
-**{proof['link']}**
-
-**📈 Aur Subscribers badhane ke liye**
-**👇🏻 Abhi yahan click karein 👇🏻**
-
-**✨ Thank you for being a Golden Member! 💛**"""
-    else:
-        return f"""🏆Congratulations **{proof['name']}**
-✅ Aapke YouTube channel par **{proof['total']}** Subscribers Successfully Add ho gaye hain! 🎯
+    # Safety Check: Agar purane JSON file se 1,000 wala data load hota hai toh use bhi badal dega
+    total_subs = proof['total']
+    if total_subs == "1,000":
+        total_subs = random.choice(["100", "200"])
+        
+    # Ab Golden ka special format remove kar diya gaya hai.
+    # Sab ke liye yahi ek format use hoga, aur sirf naam/subs hi bold hain.
+    return f"""🏆Congratulations **{proof['name']}**
+✅ Aapke YouTube channel par **{total_subs}** Subscribers Successfully Add ho gaye hain! 🎯
 
 🔗 Aapki Link:   Please chack
 
