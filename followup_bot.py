@@ -25,12 +25,13 @@ bot = TelegramClient('youtube20sub_session', API_ID, API_HASH)
 @bot.on(events.NewMessage(pattern='/start', func=lambda e: e.is_private))
 async def start_handler(event):
     user_id = str(event.sender_id)
-    if not db_ref.child(user_id).get():
-        db_ref.child(user_id).set({
-            'start_time': datetime.now().timestamp(),
-            'msg1': False, 
-            'msg2': False
-        })
+    # TEST MODE: Jab bhi koi /start dabayega, timer fresh zero se start hoga
+    db_ref.child(user_id).set({
+        'start_time': datetime.now().timestamp(),
+        'msg1': False, 
+        'msg2': False
+    })
+    print(f"Test Mode: Timer reset for user {user_id}")
 
 async def checker():
     while True:
@@ -39,26 +40,33 @@ async def checker():
         
         for uid, data in users.items():
             start_time = data.get('start_time', now)
-            diff_hours = (now - start_time) / 3600
+            # Time ko ab ghante ki jagah minutes me check kar rahe hain
+            diff_minutes = (now - start_time) / 60 
             
-            # 6 Ghante baad pehla msg
-            if diff_hours >= 6 and not data.get('msg1'):
+            # 1 Minute baad pehla msg
+            if diff_minutes >= 1 and not data.get('msg1'):
                 try:
                     await bot.send_message(int(uid), MSG_TEXT)
                     db_ref.child(uid).update({'msg1': True})
-                except: pass
+                    print(f"Test: 1 Min wala msg sent to {uid}")
+                except Exception as e:
+                    print(f"Error {uid}: {e}")
             
-            # 12 Ghante baad dusra msg
-            if diff_hours >= 12 and not data.get('msg2'):
+            # 2 Minute baad dusra msg
+            if diff_minutes >= 2 and not data.get('msg2'):
                 try:
                     await bot.send_message(int(uid), MSG_TEXT)
                     db_ref.child(uid).update({'msg2': True})
-                except: pass
+                    print(f"Test: 2 Min wala msg sent to {uid}")
+                except Exception as e:
+                    pass
                     
-        await asyncio.sleep(300) # Har 5 minute me check karega
+        # Jaldi check karne ke liye 5 min ki jagah ab har 15 second mein check karega
+        await asyncio.sleep(15) 
 
 async def main():
     await bot.start(bot_token=BOT_TOKEN)
+    print("✅ Bot Test Mode Mein Start Ho Gaya Hai!")
     bot.loop.create_task(checker())
     await bot.run_until_disconnected()
 
